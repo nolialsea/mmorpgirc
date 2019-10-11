@@ -1,0 +1,7 @@
+FEATURES
+	Login (keep track of who have which nick)
+	Messenger (send messages to someone while they are not there)
+	Scheduled messages (send messages to someone at a specified date or at his next connexion)
+
+	idle mmorpg roguelike irc game
+		

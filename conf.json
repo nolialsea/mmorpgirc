@@ -1,0 +1,6 @@
+{
+    "channel": "#CBNA",
+    "nick": "NoliBot",
+    "saveFile": "save.json",
+    "ircServer": "irc.freenode.net"
+}
