@@ -7,7 +7,8 @@ const model = {
 	level: 'REAL NOT NULL',
 	pickaxeId: 'INTEGER',
 	guildId: 'INTEGER',
-	createdAt: 'INTEGER NOT NULL'
+	lastActionAt: 'INTEGER NOT NULL',
+	createdAt: 'INTEGER NOT NULL',
 }
 
 module.exports = class Player extends Entity {
@@ -18,7 +19,8 @@ module.exports = class Player extends Entity {
 			level: 0,
 			pickaxeId: -1,
 			guildId: -1,
-			createdAt: Date.now()
+			lastActionAt: Date.now(),
+			createdAt: Date.now(),
 		})
 	}
 
@@ -29,6 +31,7 @@ module.exports = class Player extends Entity {
 			level: this.level,
 			pickaxeId: this.pickaxeId,
 			guildId: this.guildId,
+			lastActionAt: this.lastActionAt,
 			createdAt: this.createdAt,
 		}
 	}
@@ -55,5 +58,13 @@ module.exports = class Player extends Entity {
 
 	static findAll(db, callback) {
 		Entity.findAll(db, entityName, callback)
+	}
+
+	static getTimeLeftInSeconds(lastActionAt){
+		return Math.floor((Date.now() - lastActionAt)/1000)
+	}
+
+	static getTimeLeftInMinutes(lastActionAt){
+		return Math.floor(this.getTimeLeftInSeconds(lastActionAt)/60)
 	}
 }

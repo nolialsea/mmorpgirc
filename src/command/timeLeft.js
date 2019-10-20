@@ -1,6 +1,6 @@
 const c = require('irc-colors')
 const Player = require('../model/Player')
-const triggerCommand = 'stats'
+const triggerCommand = 'time'
 let db
 
 module.exports = (database) => {
@@ -16,7 +16,7 @@ module.exports = (database) => {
                 } else {
                     Player.getByAccount(db, account, (err, player) => {
                         if (player) {
-                            resolve(`Account[${account}] Nick<${nick}> : ${c.yellow(`Gold[${player.gold.toFixed(6)}]`)} TimeCredits[${Player.getTimeLeftInMinutes(player.lastActionAt)}]`)
+                            resolve(`${nick} has ${Player.getTimeLeftInMinutes(player.lastActionAt)} TimeCredits`)
                         }
                     })
                 }

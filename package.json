@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "irc": "^0.5.2",
+    "irc-colors": "^1.5.0",
     "sqlite3": "^4.1.0"
   }
 }

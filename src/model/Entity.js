@@ -48,7 +48,6 @@ module.exports = class Entity {
 
     static save(db, entityName, entity, callback) {
         const keys = []
-        console.log("Entity", entity)
         for (let prop in entity) {
             keys.push(prop)
         }

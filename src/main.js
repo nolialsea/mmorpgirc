@@ -16,7 +16,9 @@ function initDatabase() {
 function getCommands() {
 	return [
 		require('./command/mine')(db),
-		require('./command/stats')(db)
+		require('./command/stats')(db),
+		require('./command/timeLeft')(db),
+		require('./command/gold')(db),
 	]
 }
 
@@ -38,14 +40,13 @@ function onDatabaseReady() {
 	})
 
 	async function processCommand(nick, channel, message, action) {
-		console.log(`processCommand(${nick}, ${channel}, ${message}, ${action})`)
 		const account = userService.getAccountByNick(nick)
 		if (account) {
 			Player.getByAccount(db, account, async (err, player) => {
 				if (err) {
 					console.log(err)
 				} else if (player) {
-					console.log(`'<${nick}:${player.account}> ${message}`)
+					console.log(`<${nick}:${player.account}> ${message}`)
 					if (action || message.startsWith(conf.commandTrigger)) {
 						for (let command of commands) {
 							const result = await command(nick, account, commandTool.removeCommandTrigger(message))
@@ -68,13 +69,6 @@ function onDatabaseReady() {
 	}
 
 	client.addListener('message', (nick, channel, message) => {
-		console.log(nick, channel, message)
-		if (message == 'dump') {
-			console.log('dump')
-			Player.findAll(db, (err, players) => {
-				console.log(JSON.stringify({err, players}))
-			})
-		}
 		processCommand(nick, channel, message, false)
 	})
 
@@ -124,7 +118,7 @@ function onDatabaseReady() {
 					if (err.errno != 19) {
 						throw new Error(JSON.stringify(err))
 					}
-					client.say(conf.channel, `Player ${account} joins`)
+					//client.say(conf.channel, `Player ${account} joins`)
 				} else {
 					client.say(conf.channel, `Player ${account} joins for the first time`)
 				}
