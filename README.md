@@ -1,5 +1,5 @@
 # BotCoin
-IRC bot that allows to mine worthless virtual gold, designed by/for the #CBNA channel on Freenode.  
+BotCoin is an IDLE-MMO-RPG-IRC game in which you mine worthless virtual gold, designed by/for the #CBNA channel on Freenode.  
 
 This page will change as new features are implemented or defined on paper, so make sure to take a look often  
 The project is still WIP
@@ -9,12 +9,12 @@ The project is still WIP
     - Players have `Time Credits`, earned by just waiting, that can be used to do things
     - Each `Time Credit` represents `one minute`
   - Mining
-    - Costs `Time Credits` and gives `Gold`
+    - Costs `Time Credits` and gives `Gold` that can be used to... Nothing, for now
 
 ## Planned features:
 
 ### Pickaxes
-  - Increase chances of finding gold when mining (increases minimum gold mined)
+  - Increase chances of finding `Gold` when mining (increases minimum gold when mining)
   - Can be crafted (costs `1 Gold` && `24h of Time Credits`) or looted
   - Multiple rarities
     - Common : +[0-10]% minimum gold when mining
@@ -28,6 +28,14 @@ The project is still WIP
   - It cost time and gold to build a home
   - Homes can be crafted in multiple steps
   - Homes are upgradable
+    - Tiers:
+      - Hut
+      - Cottage
+      - House
+      - Mansion
+      - Tower
+      - Castle
+  - Furnitures can be purchased
     - Safe : Store your Gold
     - PetHouse : Allow to house a Pet (see below)
     - Enchanting Table : Allow to enchant Pickaxes (see below)
@@ -35,8 +43,8 @@ The project is still WIP
 ### Pets
   - Can only be looted
   - Requires a Player Home
+  - Needs to be fed (costs nothing except a little time)
   - Can DIE if owner does not take care of it
-  - Needs to be fed (costs nothing except a little time) not to die
   - Occasionnaly finds `Gems` when mining
 
 ### Gems
@@ -88,8 +96,8 @@ The project is still WIP
   - Guild PvP : Guilds can attack other Guilds headquarters to steal their gold.
     - A guild master can order a war on a specified guild. Each available member then have 10 minutes to confirm that they participate
     - War machines are automatically used by attackers if enough members can operate them
-    - Defender guild automatically use all defenses
     - The war takes form of attacks repeated periodically until one side is defeated or surrenders.
+    - Defender guild automatically use all defenses
     - During an attack, each side inflict damages to the other at the same time, total damages is calculated by the base level of players, power of their pickaxes and power of war machines or defenses.
       - Damages are first applied respectively on war machines and defenses if any until they are destroyed
       - If there is no war machine anymore and the defenders does more damages than attackers, the defenders win the war
