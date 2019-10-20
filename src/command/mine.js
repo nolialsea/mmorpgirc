@@ -1,6 +1,7 @@
 const {
-    getMinutesFromString
+    getTimeInMinutesFromString
 } = require('../tool/time')
+const p = require('../tool/print')
 const Player = require('../model/Player')
 const triggerCommand = 'mine'
 const c = require('irc-colors')
@@ -10,7 +11,7 @@ function mine(nick, player, message, resolve) {
     if (player) {
         const timeLeftTotal = Player.getTimeLeftInMinutes(player.lastActionAt)
         const randomNumber = Math.random()
-        const timeAskedToMine = getMinutesFromString(message)
+        const timeAskedToMine = getTimeInMinutesFromString(message)
         let timeToMine = 0
         if (!(timeAskedToMine)) {
             timeToMine = timeLeftTotal
@@ -18,27 +19,21 @@ function mine(nick, player, message, resolve) {
             if (timeAskedToMine <= timeLeftTotal) {
                 timeToMine = timeAskedToMine
             } else {
-                resolve(`${c.red.bgyellow(nick)} has not enough TimeCredits (${c.red(timeLeftTotal)} left)`)
+                resolve(`${p.nick(nick)} cannot mine for ${p.time(timeAskedToMine+' minutes')}: not enough TimeCredits (${c.red(timeLeftTotal)} left)`)
                 return
             }
         }
         const minedGold = (randomNumber * 2) * (timeToMine / 1440) //[0-2] gold each day (~1g/day)
 
         if (timeLeftTotal < 1) {
-            resolve(c.red(`${nick} has no more TimeCredits`))
+            resolve(`${c.bold(nick)} has ${c.red(`no more TimeCredits`)}`)
         } else {
-            const successPercent = (randomNumber * 100).toFixed(2)
-            const successPercentMessage =
-                randomNumber < 0.40 ?
-                c.red(successPercent + '%') :
-                randomNumber < 0.60 ?
-                c.yellow(successPercent + '%') :
-                c.green(successPercent + '%')
+            const successPercent = (randomNumber * 100).toFixed(2) + '%'
             player.gold += minedGold
             player.lastActionAt = player.lastActionAt + (timeToMine * 60 * 1000)
             Player.update(db, player, () => {})
             resolve([
-                `${c.bold.red.bgyellow(nick)} has mined ${c.yellow(`${minedGold.toFixed(6)} gold`)} in ${timeToMine} minutes (success: ${successPercentMessage})`
+                `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)})`
             ])
         }
     }
@@ -47,19 +42,22 @@ function mine(nick, player, message, resolve) {
 module.exports = (database) => {
     db = database
 
-    return function (nick, account, message) {
-        return new Promise(resolve => {
-            if (!message.startsWith(triggerCommand) && !(message.search(triggerCommand) !== -1 && getMinutesFromString(message))) {
-                resolve(null)
-            } else {
-                if (!account) {
+    return {
+        triggerCommand,
+        call: function (nick, account, message) {
+            return new Promise(resolve => {
+                if (!message.startsWith(triggerCommand) && !(message.search(triggerCommand) !== -1 && getTimeInMinutesFromString(message))) {
                     resolve(null)
                 } else {
-                    Player.getByAccount(db, account, (err, player) => {
-                        mine(nick, player, message, resolve)
-                    })
+                    if (!account) {
+                        resolve(null)
+                    } else {
+                        Player.getByAccount(db, account, (err, player) => {
+                            mine(nick, player, message, resolve)
+                        })
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }

@@ -1,4 +1,5 @@
 const c = require('irc-colors')
+const p = require('../tool/print')
 const Player = require('../model/Player')
 const triggerCommand = 'stats'
 let db
@@ -6,21 +7,24 @@ let db
 module.exports = (database) => {
     db = database
 
-    return function (nick, account, message) {
-        return new Promise(resolve => {
-            if (!message.startsWith(triggerCommand)) {
-                resolve(null)
-            } else {
-                if (!account) {
+    return {
+        triggerCommand,
+        call: function (nick, account, message) {
+            return new Promise(resolve => {
+                if (!message.startsWith(triggerCommand)) {
                     resolve(null)
                 } else {
-                    Player.getByAccount(db, account, (err, player) => {
-                        if (player) {
-                            resolve(`Account[${account}] Nick<${nick}> : ${c.yellow(`Gold[${player.gold.toFixed(6)}]`)} TimeCredits[${Player.getTimeLeftInMinutes(player.lastActionAt)}]`)
-                        }
-                    })
+                    if (!account) {
+                        resolve(null)
+                    } else {
+                        Player.getByAccount(db, account, (err, player) => {
+                            if (player) {
+                                resolve(`Account[${account}] Nick<${p.nick(nick)}> : Gold[${p.gold(player.gold.toFixed(6))}] TimeCredits[${p.time(Player.getTimeLeftInMinutes(player.lastActionAt))}]`)
+                            }
+                        })
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }

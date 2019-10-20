@@ -49,7 +49,7 @@ function onDatabaseReady() {
 					console.log(`<${nick}:${player.account}> ${message}`)
 					if (action || message.startsWith(conf.commandTrigger)) {
 						for (let command of commands) {
-							const result = await command(nick, account, commandTool.removeCommandTrigger(message))
+							const result = await command.call(nick, account, commandTool.removeCommandTrigger(message))
 							if (result) {
 								if (!(result instanceof Array)) {
 									console.log(result)
