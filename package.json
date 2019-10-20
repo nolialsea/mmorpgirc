@@ -9,6 +9,7 @@
   "author": "Nolialsea",
   "license": "ISC",
   "dependencies": {
-    "irc": "^0.5.2"
+    "irc": "^0.5.2",
+    "sqlite3": "^4.1.0"
   }
 }
