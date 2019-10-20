@@ -4,13 +4,17 @@ const irc = require('irc')
 const sqlite3 = require('sqlite3').verbose()
 const conf = require('./conf')
 const Player = require('./model/Player')
+const Pickaxe = require('./model/Pickaxe')
 const userService = require('./service/userService')
 
 const db = new sqlite3.Database('database.sqlite3', initDatabase)
 db.serialize()
 
 function initDatabase() {
-	Player.init(db, onDatabaseReady)
+	//FIXME: ugly way to chain
+	Player.init(db, ()=>{
+		Pickaxe.init(db, onDatabaseReady)
+	})
 }
 
 function getCommands() {
