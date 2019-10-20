@@ -13,7 +13,7 @@ The project is still WIP
 
 ## Planned features:
 
-- Pickaxes
+### Pickaxes
   - Increase chances of finding gold when mining (increases minimum gold mined)
   - Can be crafted (costs `1 Gold` && `24h of Time Credits`) or looted
   - Multiple rarities
@@ -23,32 +23,63 @@ The project is still WIP
     - Epic(1/1000 chances when crafting) : +[41-60]% minimum gold when mining
     - Legendary(1/10000 chances when crafting): +[61-80]% minimum gold when mining
 
-- Player Homes
+### Player Homes
   - Players can build their own homes
   - It cost time and gold to build a home
   - Homes can be crafted in multiple steps
   - Homes are upgradable
     - Safe : Store your Gold
     - PetHouse : Allow to house a Pet (see below)
+    - Enchanting Table : Allow to enchant Pickaxes (see below)
 
-- Pets
+### Pets
   - Can only be looted
   - Requires a Player Home
   - Can DIE if owner does not take care of it
   - Needs to be fed (costs nothing except a little time) not to die
-  - Occasionnaly finds Gold when mining
+  - Occasionnaly finds `Gems` when mining
 
-- Trading
+### Gems
+  - Used to `Enchant` Pickaxes
+  - Gem Types and bonus
+    - Diamond : +1% critic
+    - Ruby : +0.8% critic
+    - Emerald: +0.6% critic
+    - Sapphire : +0.4% critic
+    - Topaz : +0.2% critic
+    - Amethyst : +0.1% critic
+    - Amber : +0.05% critic
+
+### Enchantments
+  - Players can enchant Pickaxes
+  - Enchantments cost `Gems`
+  - Each new Enchantment have a chance to **BREAK** the Pickaxe based on its rarity
+    - Common : 1/4 chances to break
+    - Uncommon : 1/8 chances to break
+    - Rare : 1/16 chances to break
+    - Epic : 1/32 chances to break
+    - Legendary : 1/64 chances to break
+
+### Repair broken Pickaxes
+  - Your Legendary Pickaxe just broke when you enchanted it for the first time ? Bad luck...
+  - Repair your Pickaxes with Gold !
+  - Costs more for higher rarity Pickaxes
+    - Common : 1 Gold and 1 Day of Time Credits
+    - Uncommon : 2 Gold
+    - Rare : 3 Gold
+    - Epic : 4 Gold
+    - Legendary : 5 Gold
+
+### Trading
   - Give and receive money from others
-  - Sell/buy pickaxes to/from others
 
-- Events
+### Events
   - At random intervals, events are thrown at the players
   - Event stay available for a certain duration only
   - Events cost a certain amount of `Time Credits` to participate
   - Players can register to available events if they have enough `Time Credits`
 
-- Guilds !
+### Guilds !
   - Guild tax : Guild masters can define a tax percentage. Each time a guild member earn gold, a tax is deducted and added to the guilds bank
   - HeadQuarter : When you create a guild, you basically buy a headquarter that you can upgrade to unlock bonuses. Guild members are considered in the headquarter when they are available (have no temporal action in process)
     - Bank : Tax money is stored in here. You can upgrade its max durability and repair it when damaged. Repairing it is cheapest than upgrading it
