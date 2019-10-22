@@ -7,6 +7,7 @@ const model = {
     power: 'REAL NOT NULL',
     crit: 'REAL NOT NULL',
     broken: 'INTEGER NOT NULL',
+    ownedBy: 'INTEGER NOT NULL',
     createdBy: 'INTEGER NOT NULL',
 	createdAt: 'INTEGER NOT NULL',
 }
@@ -30,6 +31,7 @@ module.exports = class Pickaxe extends Entity {
             power: Math.random(),
             crit: 0,
             broken: 0,
+            ownedBy: args,
             createdBy: args,
             createdAt: Date.now(),
 		})
@@ -41,6 +43,7 @@ module.exports = class Pickaxe extends Entity {
             power: this.power,
             crit: this.crit,
             broken: this.broken,
+            ownedBy: this.ownedBy,
             createdBy: this.createdBy,
             createdAt: this.createdAt,
 		}
