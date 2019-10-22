@@ -3,7 +3,7 @@ const {
 } = require('../constant')
 
 module.exports = {
-    getRandomRarity: function getRandomRarity() {
+    getRandomRarity: () => {
         const r = Math.random()
 
         return r < 0.0001 ?
