@@ -13,13 +13,15 @@ const model = {
 }
 
 function getRandomRarity(){
-    return Math.random() < 0.0001 ?
+    const r = Math.random()
+
+    return r < 0.0001 ?
         Rarity.LEGENDARY :
-        Math.random() < 0.001 ?
+        r < 0.001 ?
         Rarity.EPIC : 
-        Math.random() < 0.01 ?
+        r < 0.01 ?
         Rarity.RARE :
-        Math.random() < 0.1 ?
+        r < 0.1 ?
         Rarity.UNCOMMON : 
         Rarity.COMMON
 }
