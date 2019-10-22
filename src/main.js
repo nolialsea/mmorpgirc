@@ -12,7 +12,7 @@ db.serialize()
 
 function initDatabase() {
 	//FIXME: ugly way to chain
-	Player.init(db, ()=>{
+	Player.init(db, () => {
 		Pickaxe.init(db, onDatabaseReady)
 	})
 }
@@ -33,6 +33,45 @@ const commandTool = {
 		} else {
 			return msg
 		}
+	}
+}
+
+function getPlayerByAccount(account) {
+	return new Promise((resolve) => {
+		Player.getByAccount(db, account, async (err, player) => {
+			if (err) {
+				console.log(err)
+			} else if (player) {
+				resolve(player)
+			}else{	
+				resolve(null)
+			}
+		})
+	});
+}
+
+function getPlayerByNick(nick) {
+	return new Promise((resolve) => {
+		const account = userService.getAccountByNick(nick)
+		if (account) {
+			getPlayerByAccount(account).then((player)=>{
+				if (player){
+					resolve(player)
+				}else{
+					resolve(null)
+				}
+			})
+		}else{
+			resolve(null)
+		}
+	});
+}
+
+async function setPlayerOnline(nick, isOnline){
+	const player = await getPlayerByNick(nick)
+	if (player){
+		player.online = isOnline
+		Player.updateUser(db, player, ()=>{})
 	}
 }
 
@@ -91,21 +130,26 @@ function onDatabaseReady() {
 
 	client.addListener('join', function (channel, nick, message) {
 		client.whois(nick)
+		setPlayerOnline(nick, true)
 	})
 
 	client.addListener('part', function (channel, nick, reason, message) {
+		setPlayerOnline(nick, false)
 		userService.removeNick(nick)
 	})
 
 	client.addListener('quit', function (nick, reason, channels, message) {
+		setPlayerOnline(nick, false)
 		userService.removeNick(nick)
 	})
 
 	client.addListener('kick', function (channel, nick, by, reason, message) {
+		setPlayerOnline(nick, false)
 		userService.removeNick(nick)
 	})
 
 	client.addListener('kill', function (nick, reason, channels, message) {
+		setPlayerOnline(nick, false)
 		userService.removeNick(nick)
 	})
 
@@ -123,6 +167,7 @@ function onDatabaseReady() {
 						throw new Error(JSON.stringify(err))
 					}
 					//client.say(conf.channel, `Player ${account} joins`)
+					setPlayerOnline(nick, true)
 				} else {
 					client.say(conf.channel, `Player ${account} joins for the first time`)
 				}
