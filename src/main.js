@@ -7,7 +7,7 @@ const Player = require('./model/Player')
 const Pickaxe = require('./model/Pickaxe')
 const userService = require('./service/userService')
 const c = require('irc-colors')
-const p = require('../tool/print')
+const p = require('./tool/print')
 
 const db = new sqlite3.Database('database.sqlite3', initDatabase)
 db.serialize()
