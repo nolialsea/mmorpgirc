@@ -18,7 +18,7 @@ module.exports = (database) => {
                     } else {
                         Player.getByAccount(db, account, (err, player) => {
                             if (player) {
-                                resolve(`${nick} has ${p.time(`${Player.getTimeLeftInMinutes(player.lastActionAt)} minutes`)} of TimeCredits`)
+                                resolve(`${p.nick(nick)} has ${p.time(`${Player.getTimeLeftInMinutes(player.lastActionAt)} minutes`)} of TimeCredits`)
                             }
                         })
                     }
