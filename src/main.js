@@ -169,7 +169,7 @@ function onDatabaseReady() {
 						throw new Error(JSON.stringify(err))
 					}
 					//client.say(conf.channel, `Player ${account} joins`)
-					setPlayerOnline(nick, true)
+					setPlayerOnline(user.nick, true)
 				} else {
 					client.say(conf.channel, `Player ${p.nick(account)} joins for the first time`)
 				}
