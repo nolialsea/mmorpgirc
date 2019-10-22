@@ -1,5 +1,5 @@
 const Entity = require('./Entity')
-const {Rarity} = require('../constant')
+const {getRandomRarity} = require('../tool/lib')
 
 const entityName = "Pickaxe"
 const model = {
@@ -12,19 +12,6 @@ const model = {
 	createdAt: 'INTEGER NOT NULL',
 }
 
-function getRandomRarity(){
-    const r = Math.random()
-
-    return r < 0.0001 ?
-        Rarity.LEGENDARY :
-        r < 0.001 ?
-        Rarity.EPIC : 
-        r < 0.01 ?
-        Rarity.RARE :
-        r < 0.1 ?
-        Rarity.UNCOMMON : 
-        Rarity.COMMON
-}
 
 module.exports = class Pickaxe extends Entity {
 	constructor(args) {
