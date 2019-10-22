@@ -6,6 +6,8 @@ const conf = require('./conf')
 const Player = require('./model/Player')
 const Pickaxe = require('./model/Pickaxe')
 const userService = require('./service/userService')
+const c = require('irc-colors')
+const p = require('../tool/print')
 
 const db = new sqlite3.Database('database.sqlite3', initDatabase)
 db.serialize()
@@ -95,11 +97,11 @@ function onDatabaseReady() {
 							const result = await command.call(nick, account, commandTool.removeCommandTrigger(message))
 							if (result) {
 								if (!(result instanceof Array)) {
-									console.log(result)
+									console.log(c.stripColorsAndStyle(result))
 									client.say(conf.channel, result)
 								} else {
 									for (let res of result) {
-										console.log(res)
+										console.log(c.stripColorsAndStyle(res))
 										client.say(conf.channel, res)
 									}
 								}
@@ -169,7 +171,7 @@ function onDatabaseReady() {
 					//client.say(conf.channel, `Player ${account} joins`)
 					setPlayerOnline(nick, true)
 				} else {
-					client.say(conf.channel, `Player ${account} joins for the first time`)
+					client.say(conf.channel, `Player ${p.nick(account)} joins for the first time`)
 				}
 			})
 		}
