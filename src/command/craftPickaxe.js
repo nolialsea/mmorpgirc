@@ -28,7 +28,7 @@ function craftPickaxe(nick, player, resolve) {
         
         console.log(JSON.stringify(pickaxe))
         resolve([
-            `${p.nick(nick)} has crafted a pickaxe in ${p.time(nbMinutesInDay)} minutes ! ${p.getColorFromRarity(pickaxe.rarity, `[Rarity: ${RarityText[pickaxe.rarity]}, Power: ${powerPercent}]`)}`
+            `${p.nick(nick)} has crafted a pickaxe in ${p.time(conf.pickaxe.timeToCraft)} minutes ! ${p.getColorFromRarity(pickaxe.rarity, `[Rarity: ${RarityText[pickaxe.rarity]}, Power: ${powerPercent}]`)}`
         ])
     }
 }
