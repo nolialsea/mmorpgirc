@@ -18,7 +18,7 @@ module.exports = {
             c.bold.green(text)
     },
     common(text){
-        return c.gray.bgblack(text)
+        return c.lightgray.bgblack(text)
     },
     uncommon(text){
         return c.white.bgblack(text)
