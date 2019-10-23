@@ -11,7 +11,7 @@ const c = require('irc-colors')
 const triggerCommand = 'craftPickaxe'
 let db
 
-function craftPickaxe(nick, player, message, resolve) {
+function craftPickaxe(nick, player, resolve) {
     if (player) {
         const timeLeftTotal = Player.getTimeLeftInMinutes(player.lastActionAt)
         if (timeLeftTotal >= conf.pickaxe.timeToCraft) {
