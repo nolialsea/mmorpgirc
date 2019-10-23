@@ -36,7 +36,7 @@ function mine(nick, player, message, resolve) {
         } else {
             const successPercent = (randomNumber * 100).toFixed(2) + '%'
             player.gold += minedGold
-            player.lastActionAt = isAdmin ? player.lastActionAt : player.lastActionAt + (timeToMine * 60 * 1000)
+            player.lastActionAt = isAdmin ? player.lastActionAt : (player.lastActionAt + timeToMine * 60 * 1000)
             Player.update(db, player, () => {})
             resolve([
                 `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)}) ${isAdmin ? p.gold(`ADMIN COMMAND`) : ''}`
