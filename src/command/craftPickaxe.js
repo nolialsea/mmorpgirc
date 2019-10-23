@@ -29,8 +29,12 @@ function craftPickaxe(nick, player, message, resolve) {
         Player.update(db, player, () => {})
         
         if (isAdmin){
-            if (message.match('epic')){
-                pickaxe.rarity = RarityText[Rarity.EPIC]
+            if (message.match('rare')){
+                pickaxe.rarity = Rarity.RARE
+            }else if (message.match('epic')){
+                pickaxe.rarity = Rarity.EPIC
+            }else if (message.match('legendary')){
+                pickaxe.rarity = Rarity.LEGENDARY
             }
         }
         resolve([
