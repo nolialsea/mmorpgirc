@@ -6,5 +6,10 @@
     "commandTrigger": "!",
     "pickaxe": {
         "timeToCraft": 1
-    }
+    },
+    "admins": [
+        "Nolia",
+        "Bl4ckb0ne",
+        "Cysteine"
+    ]
 }

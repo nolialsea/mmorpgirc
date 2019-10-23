@@ -4,6 +4,7 @@ const {
 const {
     nbMinutesInDay
 } = require('../constant')
+const lib = require('../tool/lib')
 const p = require('../tool/print')
 const Player = require('../model/Player')
 const c = require('irc-colors')
@@ -20,7 +21,7 @@ function mine(nick, player, message, resolve) {
         if (!(timeAskedToMine)) {
             timeToMine = timeLeftTotal
         } else {
-            if (timeAskedToMine <= timeLeftTotal) {
+            if (timeAskedToMine <= timeLeftTotal || isAdmin) {
                 timeToMine = timeAskedToMine
             } else {
                 resolve(`${p.nick(nick)} cannot mine for ${p.time(timeAskedToMine+' minutes')}: not enough TimeCredits (${c.red(timeLeftTotal)} left)`)
@@ -37,7 +38,7 @@ function mine(nick, player, message, resolve) {
             player.lastActionAt = player.lastActionAt + (timeToMine * 60 * 1000)
             Player.update(db, player, () => {})
             resolve([
-                `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)})`
+                `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)}) ${lib.isAdmin(player.account) ? p.gold(`ADMIN COMMAND`) : ''}`
             ])
         }
     }

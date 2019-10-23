@@ -1,6 +1,7 @@
 const {
     Rarity
 } = require('../constant')
+const conf = require('../conf')
 
 module.exports = {
     getRandomRarity: () => {
@@ -15,5 +16,8 @@ module.exports = {
             r < 0.1 ?
             Rarity.UNCOMMON :
             Rarity.COMMON
+    },
+    isAdmin: (account)=>{
+        return conf.admins.includes(account)
     }
 }
