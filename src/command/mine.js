@@ -22,14 +22,14 @@ function mine(nick, player, message, resolve) {
         if (!(timeAskedToMine)) {
             timeToMine = timeLeftTotal
         } else {
-            if (timeAskedToMine <= timeLeftTotal || isAdmin) {
+            if ((timeAskedToMine <= timeLeftTotal) || isAdmin) {
                 timeToMine = timeAskedToMine
             } else {
                 resolve(`${p.nick(nick)} cannot mine for ${p.time(timeAskedToMine+' minutes')}: not enough TimeCredits (${c.red(timeLeftTotal)} left)`)
                 return
             }
         }
-        const minedGold = (randomNumber * 2) * (timeToMine / 1440) //[0-2] gold each day (~1g/day)
+        const minedGold = (randomNumber * 2) * ((isAdmin ? 0 : timeToMine) / 1440) //[0-2] gold each day (~1g/day)
 
         if (timeLeftTotal < 1) {
             resolve(`${c.bold(nick)} has ${c.red(`no more TimeCredits`)}`)
