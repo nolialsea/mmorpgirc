@@ -72,6 +72,7 @@ function getPlayerByNick(nick) {
 async function setPlayerOnline(nick, isOnline){
 	const player = await getPlayerByNick(nick)
 	if (player){
+		console.log(nick, isOnline)
 		player.online = isOnline
 		Player.updateUser(db, player, (err)=>{if (err) console.log(err)})
 	}
