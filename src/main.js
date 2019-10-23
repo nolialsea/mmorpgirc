@@ -116,10 +116,6 @@ function onDatabaseReady() {
 
 	client.addListener('message', (nick, channel, message) => {
 		processCommand(nick, channel, message, false)
-		//Todo: remove temp code
-		Player.findAll(db, (err, players)=>{
-			console.log(JSON.stringify(players, null, 4))
-		})
 	})
 
 	client.addListener('action', (nick, channel, message) => {
