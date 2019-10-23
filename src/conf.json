@@ -5,6 +5,6 @@
     "ircServer": "irc.freenode.net",
     "commandTrigger": "!",
     "pickaxe": {
-        "timeToCraft": 1440
+        "timeToCraft": 1
     }
 }
