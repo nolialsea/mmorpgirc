@@ -18,19 +18,19 @@ module.exports = {
             c.bold.green(text)
     },
     common(text){
-        return c.bgblack.gray(text)
+        return c.gray.bgblack(text)
     },
     uncommon(text){
-        return c.bgblack.white(text)
+        return c.white.bgblack(text)
     },
     rare(text){
-        return c.bgblack.lightgreen(text)
+        return c.lightgreen.bgblack(text)
     },
     epic(text){
-        return c.bgblack.pink(text)
+        return c.pink.bgblack(text)
     },
     legendary(text){
-        return c.bgblack.yellow(text)
+        return c.yellow.bgblack(text)
     },
     getColorFromRarity(rarity, text){
         return ([
