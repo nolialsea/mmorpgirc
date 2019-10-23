@@ -73,7 +73,7 @@ async function setPlayerOnline(nick, isOnline){
 	const player = await getPlayerByNick(nick)
 	if (player){
 		player.online = isOnline
-		Player.updateUser(db, player, ()=>{})
+		Player.updateUser(db, player, (err)=>{if (err) console.log(err)})
 	}
 }
 
@@ -116,7 +116,7 @@ function onDatabaseReady() {
 	client.addListener('message', (nick, channel, message) => {
 		processCommand(nick, channel, message, false)
 		//Todo: remove temp code
-		Player.findAll(db, (players)=>{
+		Player.findAll(db, (err, players)=>{
 			console.log(JSON.stringify(players, null, 4))
 		})
 	})
