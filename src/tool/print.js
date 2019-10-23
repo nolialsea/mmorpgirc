@@ -33,12 +33,12 @@ module.exports = {
         return c.bgblack.yellow(text)
     },
     getColorFromRarity(rarity, text){
-        return [
+        return ([
             this.common(text),
             this.uncommon(text),
             this.rare(text),
             this.epic(text),
             this.legendary(text),
-        ][rarity]
+        ])[rarity]
     }
 }
