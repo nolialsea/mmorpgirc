@@ -31,7 +31,7 @@ function mine(nick, player, message, resolve) {
         }
         const minedGold = (randomNumber * 2) * (timeToMine / 1440) //[0-2] gold each day (~1g/day)
 
-        if (timeLeftTotal < 1 || !isAdmin) {
+        if (!isAdmin && timeLeftTotal < 1) {
             resolve(`${c.bold(nick)} has ${c.red(`no more TimeCredits`)}`)
         } else {
             const successPercent = (randomNumber * 100).toFixed(2) + '%'
