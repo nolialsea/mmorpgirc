@@ -4,7 +4,7 @@ const {
 const p = require('../tool/print')
 const Player = require('../model/Player')
 const conf = require('../conf')
-const {nbMinutesInDay, RarityText} = require('../constant')
+const {nbMinutesInDay, Rarity, RarityText} = require('../constant')
 const lib = require('../tool/lib')
 const Pickaxe = require('../model/Pickaxe')
 const c = require('irc-colors')
@@ -12,7 +12,7 @@ const c = require('irc-colors')
 const triggerCommand = 'craftPickaxe'
 let db
 
-function craftPickaxe(nick, player, resolve) {
+function craftPickaxe(nick, player, message, resolve) {
     if (player) {
         const timeLeftTotal = Player.getTimeLeftInMinutes(player.lastActionAt)
         if (timeLeftTotal >= conf.pickaxe.timeToCraft || lib.isAdmin(player.account)) {
@@ -24,12 +24,17 @@ function craftPickaxe(nick, player, resolve) {
 
         const pickaxe = new Pickaxe(player.account)
         const powerPercent = (pickaxe.power * 100).toFixed(2) + '%'
+        const isAdmin = lib.isAdmin(player.account)
         player.lastActionAt = player.lastActionAt + (conf.pickaxe.timeToCraft * 60 * 1000)
         Player.update(db, player, () => {})
         
-        console.log(JSON.stringify(pickaxe))
+        if (isAdmin){
+            if (message.find('epic') != -1){
+                pickaxe.rarity = RarityText[Rarity.EPIC]
+            }
+        }
         resolve([
-            `${p.nick(nick)} has crafted a pickaxe in ${p.time(conf.pickaxe.timeToCraft)} minutes ! ${p.getColorFromRarity(pickaxe.rarity, `[Rarity: ${RarityText[pickaxe.rarity]}, Power: ${powerPercent}]`)} ${lib.isAdmin(player.account) ? p.gold(`ADMIN COMMAND`) : ''}`
+            `${p.nick(nick)} has crafted a pickaxe in ${p.time(conf.pickaxe.timeToCraft)} minutes ! ${p.getColorFromRarity(pickaxe.rarity, `[Rarity: ${RarityText[pickaxe.rarity]}, Power: ${powerPercent}]`)} ${isAdmin ? p.gold(`ADMIN COMMAND`) : ''}`
         ])
     }
 }
@@ -48,7 +53,7 @@ module.exports = (database) => {
                         resolve(null)
                     } else {
                         Player.getByAccount(db, account, (err, player) => {
-                            craftPickaxe(nick, player, resolve)
+                            craftPickaxe(nick, player, message, resolve)
                         })
                     }
                 }
