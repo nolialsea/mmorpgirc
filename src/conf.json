@@ -3,5 +3,8 @@
     "channel": "#nolichan",
     "nick": "BotCoin",
     "ircServer": "irc.freenode.net",
-    "commandTrigger": "!"
+    "commandTrigger": "!",
+    "pickaxe": {
+        "timeToCraft": 1440
+    }
 }

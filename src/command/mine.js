@@ -1,10 +1,14 @@
 const {
     getTimeInMinutesFromString
 } = require('../tool/time')
+const {
+    nbMinutesInDay
+} = require('../constant')
 const p = require('../tool/print')
 const Player = require('../model/Player')
-const triggerCommand = 'mine'
 const c = require('irc-colors')
+
+const triggerCommand = 'mine'
 let db
 
 function mine(nick, player, message, resolve) {
@@ -44,7 +48,7 @@ module.exports = (database) => {
 
     return {
         triggerCommand,
-        call: function (nick, account, message) {
+        call: function (nick, account, player, message) {
             return new Promise(resolve => {
                 if (!message.startsWith(triggerCommand) && !(message.search(triggerCommand) !== -1 && getTimeInMinutesFromString(message))) {
                     resolve(null)
@@ -52,9 +56,7 @@ module.exports = (database) => {
                     if (!account) {
                         resolve(null)
                     } else {
-                        Player.getByAccount(db, account, (err, player) => {
-                            mine(nick, player, message, resolve)
-                        })
+                        mine(nick, player, message, resolve)
                     }
                 }
             });

@@ -9,7 +9,7 @@ module.exports = (database) => {
 
     return {
         triggerCommand,
-        call: function (nick, account, message) {
+        call: function (nick, account, player, message) {
             return new Promise(resolve => {
                 if (!message.startsWith(triggerCommand)) {
                     resolve(null)
@@ -17,11 +17,7 @@ module.exports = (database) => {
                     if (!account) {
                         resolve(null)
                     } else {
-                        Player.getByAccount(db, account, (err, player) => {
-                            if (player) {
-                                resolve(`Account[${account}] Nick<${p.nick(nick)}> : Gold[${p.gold(player.gold.toFixed(6))}] TimeCredits[${p.time(Player.getTimeLeftInMinutes(player.lastActionAt))}]`)
-                            }
-                        })
+                        resolve(`Account[${account}] Nick<${p.nick(nick)}> : Gold[${p.gold(player.gold.toFixed(6))}] TimeCredits[${p.time(Player.getTimeLeftInMinutes(player.lastActionAt))}]`)
                     }
                 }
             });

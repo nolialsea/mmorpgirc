@@ -12,7 +12,6 @@ const model = {
 	createdAt: 'INTEGER NOT NULL',
 }
 
-
 module.exports = class Pickaxe extends Entity {
 	constructor(args) {
 		super(typeof args != 'string' ? args : {
@@ -42,8 +41,8 @@ module.exports = class Pickaxe extends Entity {
 		Entity.createTable(db, entityName, model, callback)
 	}
 
-	saveOrUpdate(db, callback) {
-		Entity.saveOrUpdateByProperty(db, entityName, this, "rowid", this.rowid, callback)
+	static saveOrUpdate(db, pickaxe, callback) {
+		Entity.saveOrUpdateByProperty(db, entityName, pickaxe, "rowid", pickaxe.rowid, callback)
 	}
 
 	save(db, callback) {

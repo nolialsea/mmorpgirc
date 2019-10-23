@@ -19,12 +19,13 @@ function initDatabase() {
 	})
 }
 
-function getCommands() {
+function getCommands(db) {
 	return [
 		require('./command/mine')(db),
 		require('./command/stats')(db),
 		require('./command/timeLeft')(db),
 		require('./command/gold')(db),
+		require('./command/craftPickaxe')(db)
 	]
 }
 
@@ -79,7 +80,7 @@ async function setPlayerOnline(nick, isOnline){
 }
 
 function onDatabaseReady() {
-	const commands = getCommands()
+	const commands = getCommands(db)
 
 	let client = new irc.Client(conf.ircServer, conf.nick, {
 		channels: [conf.channel],
@@ -95,7 +96,7 @@ function onDatabaseReady() {
 					console.log(`<${nick}:${player.account}> ${message}`)
 					if (action || message.startsWith(conf.commandTrigger)) {
 						for (let command of commands) {
-							const result = await command.call(nick, account, commandTool.removeCommandTrigger(message))
+							const result = await command.call(nick, account, player, commandTool.removeCommandTrigger(message))
 							if (result) {
 								if (!(result instanceof Array)) {
 									console.log(c.stripColorsAndStyle(result))
