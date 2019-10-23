@@ -18,13 +18,13 @@ module.exports = {
             c.bold.green(text)
     },
     common(text){
-        return c.lightgray.bgblack(text)
-    },
-    uncommon(text){
         return c.white.bgblack(text)
     },
-    rare(text){
+    uncommon(text){
         return c.lightgreen.bgblack(text)
+    },
+    rare(text){
+        return c.cyan.bgblack(text)
     },
     epic(text){
         return c.pink.bgblack(text)
