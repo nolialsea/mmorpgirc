@@ -29,14 +29,14 @@ function mine(nick, player, message, resolve) {
                 return
             }
         }
-        const minedGold = (randomNumber * 2) * ((isAdmin ? 0 : timeToMine) / 1440) //[0-2] gold each day (~1g/day)
+        const minedGold = (randomNumber * 2) * (timeToMine / 1440) //[0-2] gold each day (~1g/day)
 
         if (timeLeftTotal < 1) {
             resolve(`${c.bold(nick)} has ${c.red(`no more TimeCredits`)}`)
         } else {
             const successPercent = (randomNumber * 100).toFixed(2) + '%'
             player.gold += minedGold
-            player.lastActionAt = player.lastActionAt + (timeToMine * 60 * 1000)
+            player.lastActionAt = isAdmin ? player.lastActionAt : player.lastActionAt + (timeToMine * 60 * 1000)
             Player.update(db, player, () => {})
             resolve([
                 `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)}) ${isAdmin ? p.gold(`ADMIN COMMAND`) : ''}`
