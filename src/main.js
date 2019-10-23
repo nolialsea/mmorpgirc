@@ -74,7 +74,7 @@ async function setPlayerOnline(nick, isOnline){
 	if (player){
 		console.log(nick, isOnline)
 		player.online = isOnline
-		Player.updateUser(db, player, (err)=>{if (err) console.log(err)})
+		Player.update(db, player, (err)=>{if (err) console.log(err)})
 	}
 }
 
