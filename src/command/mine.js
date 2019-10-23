@@ -16,6 +16,7 @@ function mine(nick, player, message, resolve) {
     if (player) {
         const timeLeftTotal = Player.getTimeLeftInMinutes(player.lastActionAt)
         const randomNumber = Math.random()
+        const isAdmin = lib.isAdmin(player.account)
         const timeAskedToMine = getTimeInMinutesFromString(message)
         let timeToMine = 0
         if (!(timeAskedToMine)) {
@@ -38,7 +39,7 @@ function mine(nick, player, message, resolve) {
             player.lastActionAt = player.lastActionAt + (timeToMine * 60 * 1000)
             Player.update(db, player, () => {})
             resolve([
-                `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)}) ${lib.isAdmin(player.account) ? p.gold(`ADMIN COMMAND`) : ''}`
+                `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)}) ${isAdmin ? p.gold(`ADMIN COMMAND`) : ''}`
             ])
         }
     }
