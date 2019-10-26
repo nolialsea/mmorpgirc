@@ -16,13 +16,12 @@ function mine(nick, player, message, resolve) {
     if (player) {
         const timeLeftTotal = Player.getTimeLeftInMinutes(player.lastActionAt)
         const randomNumber = Math.random()
-        const isAdmin = lib.isAdmin(player.account)
         const timeAskedToMine = getTimeInMinutesFromString(message)
         let timeToMine = 0
         if (!(timeAskedToMine)) {
             timeToMine = timeLeftTotal
         } else {
-            if ((timeAskedToMine <= timeLeftTotal) || isAdmin) {
+            if ((timeAskedToMine <= timeLeftTotal)) {
                 timeToMine = timeAskedToMine
             } else {
                 resolve(`${p.nick(nick)} cannot mine for ${p.time(timeAskedToMine+' minutes')}: not enough TimeCredits (${c.red(timeLeftTotal)} left)`)
@@ -31,15 +30,15 @@ function mine(nick, player, message, resolve) {
         }
         const minedGold = (randomNumber * 2) * (timeToMine / 1440) //[0-2] gold each day (~1g/day)
 
-        if (!isAdmin && timeLeftTotal < 1) {
+        if (timeLeftTotal < 1) {
             resolve(`${c.bold(nick)} has ${c.red(`no more TimeCredits`)}`)
         } else {
             const successPercent = (randomNumber * 100).toFixed(2) + '%'
             player.gold += minedGold
-            player.lastActionAt = isAdmin ? player.lastActionAt : (player.lastActionAt + timeToMine * 60 * 1000)
+            player.lastActionAt = player.lastActionAt + timeToMine * 60 * 1000
             Player.update(db, player, () => {})
             resolve([
-                `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)}) ${isAdmin ? p.gold(`ADMIN COMMAND`) : ''}`
+                `${p.nick(nick)} has mined ${p.gold(`${minedGold.toFixed(6)} gold`)} in ${p.time(`${timeToMine} minutes`)} (success: ${p.success(successPercent, randomNumber)})`
             ])
         }
     }
