@@ -15,7 +15,7 @@ let db
 function craftPickaxe(nick, player, message, resolve) {
     if (player) {
         const timeLeftTotal = Player.getTimeLeftInMinutes(player.lastActionAt)
-        if (timeLeftTotal >= conf.pickaxe.timeToCraft || lib.isAdmin(player.account)) {
+        if (timeLeftTotal >= conf.pickaxe.timeToCraft) {
             timeToMine = conf.pickaxe.timeToCraft
         } else {
             resolve(`${p.nick(nick)} cannot craft a pickaxe: not enough TimeCredits (${c.red(timeLeftTotal)}/${p.time(conf.pickaxe.timeToCraft)})`)
@@ -42,7 +42,7 @@ function craftPickaxe(nick, player, message, resolve) {
             }
         }
         resolve([
-            `${p.nick(nick)} has crafted a pickaxe in ${p.time(conf.pickaxe.timeToCraft)} minutes ! ${p.getColorFromRarity(pickaxe.rarity, `[Rarity: ${RarityText[pickaxe.rarity]}, Power: ${powerPercent}]`)} ${isAdmin ? p.gold(`ADMIN COMMAND`) : ''}`
+            `${p.nick(nick)} has crafted a pickaxe in ${p.time(conf.pickaxe.timeToCraft)} minutes ! ${p.getColorFromRarity(pickaxe.rarity, `[Rarity: ${RarityText[pickaxe.rarity]}, Power: ${powerPercent}]`)}`
         ])
     }
 }

@@ -25,7 +25,8 @@ function getCommands(db) {
 		require('./command/stats')(db),
 		require('./command/timeLeft')(db),
 		require('./command/gold')(db),
-		require('./command/craftPickaxe')(db)
+		require('./command/craftPickaxe')(db),
+		require('./command/forex')(db),
 	]
 }
 
