@@ -21,6 +21,7 @@ function getRate() {
     getRates((values) => {
         rate = processValues(values)
         lastContactInHours = (Date.now() - rate.timestamp) / 1000 / 60 / 60
+        closePositions()
     })
 }
 
@@ -63,7 +64,7 @@ function closePosition(position, profit, ratio) {
             player.gold += position.investment + profit
             Player.update(db, player, (err) => {if (err) console.log(err)})
             ForexPosition.update(db, position, (err) => {if (err) console.log(err)})
-            client.say(conf.channel, `Closing position of ${position.playerId} with a ${profit >= 0 ? "profit" : "loss"} of ${(ratio*100).toFixed(0)}% (${p.gold(`+${profit.toFixed(6)} gold`)})`)
+            client.say(conf.channel, `Closing position of ${position.playerId} with a ${profit >= 0 ? "profit" : "loss"} of ${(ratio*100).toFixed(0)}% (${p.gold(`${profit.toFixed(6)} gold`)})`)
         }
     })
 }
@@ -140,7 +141,6 @@ module.exports = (database, client_) => {
     client = client_
     db = database
 
-    setInterval(closePositions, 30000)
     setInterval(getRate, 5000)
 
     return {
