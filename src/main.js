@@ -6,6 +6,7 @@ const conf = require('./conf')
 const Player = require('./model/Player')
 const Pickaxe = require('./model/Pickaxe')
 const userService = require('./service/userService')
+const ForexPosition = require('./model/ForexPosition')
 const c = require('irc-colors')
 const p = require('./tool/print')
 
@@ -15,18 +16,20 @@ db.serialize()
 function initDatabase() {
 	//FIXME: ugly way to chain
 	Player.init(db, () => {
-		Pickaxe.init(db, onDatabaseReady)
+		Pickaxe.init(db, () => {
+			ForexPosition.init(db, onDatabaseReady)
+		})
 	})
 }
 
-function getCommands(db) {
+function getCommands(db, client) {
 	return [
 		require('./command/mine')(db),
 		require('./command/stats')(db),
 		require('./command/timeLeft')(db),
 		require('./command/gold')(db),
 		require('./command/craftPickaxe')(db),
-		require('./command/forex')(db),
+		require('./command/forex')(db, client),
 	]
 }
 
@@ -47,7 +50,7 @@ function getPlayerByAccount(account) {
 				console.log(err)
 			} else if (player) {
 				resolve(player)
-			}else{	
+			} else {
 				resolve(null)
 			}
 		})
@@ -58,33 +61,34 @@ function getPlayerByNick(nick) {
 	return new Promise((resolve) => {
 		const account = userService.getAccountByNick(nick)
 		if (account) {
-			getPlayerByAccount(account).then((player)=>{
-				if (player){
+			getPlayerByAccount(account).then((player) => {
+				if (player) {
 					resolve(player)
-				}else{
+				} else {
 					resolve(null)
 				}
 			})
-		}else{
+		} else {
 			resolve(null)
 		}
 	});
 }
 
-async function setPlayerOnline(nick, isOnline){
+async function setPlayerOnline(nick, isOnline) {
 	const player = await getPlayerByNick(nick)
-	if (player){
+	if (player) {
 		player.online = isOnline
-		Player.update(db, player, (err)=>{if (err) console.log(err)})
+		Player.update(db, player, (err) => {
+			if (err) console.log(err)
+		})
 	}
 }
 
 function onDatabaseReady() {
-	const commands = getCommands(db)
-
 	let client = new irc.Client(conf.ircServer, conf.nick, {
 		channels: [conf.channel],
 	})
+	let commands = getCommands(db, client)
 
 	async function processCommand(nick, channel, message, action) {
 		const account = userService.getAccountByNick(nick)
@@ -173,7 +177,7 @@ function onDatabaseReady() {
 					//client.say(conf.channel, `Player ${account} joins`)
 					setPlayerOnline(user.nick, true)
 				} else {
-					client.say(conf.channel, `Player ${p.nick(account)} joins for the first time`)
+					//client.say(conf.channel, `Player ${p.nick(account)} joins for the first time`)
 				}
 			})
 		}

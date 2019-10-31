@@ -1,37 +1,39 @@
 const Entity = require('./Entity')
-const {getRandomRarity} = require('../tool/lib')
+const {
+	getRandomRarity
+} = require('../tool/lib')
 
 const entityName = "ForexPosition"
 const model = {
-    playerId: 'TEXT NOT NULL',
-    timestamp: 'INTEGER NOT NULL',
-    ask: 'REAL NOT NULL',
-    bid: 'REAL NOT NULL',
-    spread: 'REAL NOT NULL',
-    investment: 'REAL NOT NULL',
-    autoCloseLoss: 'REAL NOT NULL',
-    autoCloseProfit: 'REAL NOT NULL',
-    lever: 'INTEGER NOT NULL',
-    isLongPosition: 'INTEGER NOT NULL'
+	playerId: 'TEXT NOT NULL',
+	rate: 'REAL NOT NULL',
+	investment: 'REAL NOT NULL',
+	autoCloseLoss: 'REAL NOT NULL',
+	autoCloseProfit: 'REAL NOT NULL',
+	lever: 'INTEGER NOT NULL',
+	isLongPosition: 'INTEGER NOT NULL',
+	createdAt: 'INTEGER NOT NULL',
+	closedAt: 'INTEGER',
+	profit: 'REAL',
 }
 
-module.exports = class Pickaxe extends Entity {
+module.exports = class ForexPosition extends Entity {
 	constructor(args) {
 		super(args)
 	}
 
-	toDict(){
+	toDict() {
 		return {
-            playerId: this.playerId,
-            timestamp: this.timestamp,
-            ask: this.ask,
-            bid: this.bid,
-            spread: this.spread,
-            investment: this.investment,
-            autoCloseLoss: this.autoCloseLoss,
-            autoCloseProfit: this.autoCloseProfit,
-            lever: this.lever,
-            isLongPosition: this.direction
+			playerId: this.playerId,
+			rate: this.rate,
+			investment: this.investment,
+			autoCloseLoss: this.autoCloseLoss,
+			autoCloseProfit: this.autoCloseProfit,
+			lever: this.lever,
+			isLongPosition: this.isLongPosition,
+			createdAt: this.createdAt,
+			closedAt: this.closedAt,
+			profit: this.profit,
 		}
 	}
 
