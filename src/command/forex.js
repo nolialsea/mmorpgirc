@@ -130,7 +130,7 @@ function processRate(nick, player, rate, message, resolve) {
                 createPosition(resolve, rate, player, nick, gold, 0, lever, autoCloseLoss, autoCloseProfit)
             }
         } else {
-            resolve(`Player ${nick} does not have enough gold (${p.gold(`${player.gold}/${gold}`)})`)
+            resolve(`Player ${nick} does not have enough gold (${p.gold(`${player.gold.toFixed(6)}/${gold}`)})`)
         }
     } else {
         resolve(null)
