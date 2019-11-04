@@ -114,7 +114,7 @@ function processRate(nick, player, rate, message, resolve) {
         gold = minMax(0.0001, 999999999999, parseFloat(goldMatch[1]))
     }
     if (leverMatch) {
-        lever = minMax(0, 1000, parseInt(leverMatch[2]))
+        lever = minMax(1, 1000, parseInt(leverMatch[2]))
     }
     if (autoCloseLossMatch) {
         autoCloseLoss = minMax(0.01, 0.5, parseFloat(autoCloseLossMatch[3]))
