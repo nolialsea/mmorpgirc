@@ -46,6 +46,14 @@ module.exports = class Entity {
         })
     }
 
+    static findByProperty(db, entityName, property, value, callback) {
+        const sql = `SELECT rowid, * FROM ${entityName} WHERE ${property}=?`
+        log(sql)
+        db.all(sql, value, (err, entities) => {
+            callback(err, entities)
+        })
+    }
+
     static save(db, entityName, entity, callback) {
         const keys = []
         for (let prop in entity) {

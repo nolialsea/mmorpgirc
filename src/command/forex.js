@@ -103,6 +103,7 @@ function processRate(nick, player, rate, message, resolve) {
     let leverMatch = message.match(/l(ever)?[ ]?([0-9]{1,4})/)
     let autoCloseLossMatch = message.match(/(auto)?(Close)?[Ll]{1}oss[ ]?([0-9]{1}(\.[0-9]{1,6})?)/)
     let autoCloseProfitMatch = message.match(/(auto)?(Close)?[Pp]{1}rofit[ ]?([0-9]{1}(\.[0-9]{1,6})?)/)
+    let matchPosition = message.match(/pos(ition)?/)
 
     let gold
     let lever
@@ -122,7 +123,7 @@ function processRate(nick, player, rate, message, resolve) {
         autoCloseProfit = minMax(0.01, 0.5, parseFloat(autoCloseProfitMatch[3]))
     }
 
-    if (gold) {
+    if (gold && !matchPosition) {
         if (player.gold >= gold){
             if (message.match("(long|buy)")) {
                 createPosition(resolve, rate, player, nick, gold, 1, lever, autoCloseLoss, autoCloseProfit)
@@ -133,7 +134,16 @@ function processRate(nick, player, rate, message, resolve) {
             resolve(`Player ${nick} does not have enough gold (${p.gold(`${player.gold.toFixed(6)}/${gold}`)})`)
         }
     } else {
-        resolve(null)
+        if (!matchPosition){
+            resolve(`Forex rates : ${JSON.stringify(rate)}`)
+        }else{
+            ForexPosition.findByPlayerId(db, player.account, (err, positions)=>{
+                if (err) console.log(err)
+                else {
+                    resolve(`${JSON.stringify(positions)}`)
+                }
+            })
+        }
     }
 }
 

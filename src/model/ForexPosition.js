@@ -41,6 +41,10 @@ module.exports = class ForexPosition extends Entity {
 		Entity.createTable(db, entityName, model, callback)
 	}
 
+	static findByPlayerId(db, playerId, callback){
+		Entity.findByProperty(db, entityName, "playerId", playerId, callback)
+	}
+
 	static saveOrUpdate(db, forexPosition, callback) {
 		Entity.saveOrUpdateByProperty(db, entityName, pickaxe, "rowid", forexPosition.rowid, callback)
 	}
