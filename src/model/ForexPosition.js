@@ -41,8 +41,11 @@ module.exports = class ForexPosition extends Entity {
 		Entity.createTable(db, entityName, model, callback)
 	}
 
-	static findByPlayerId(db, playerId, callback){
-		Entity.findByProperty(db, entityName, "playerId", playerId, callback)
+	static findOpenByPlayerId(db, playerId, callback){
+		const sql = `SELECT rowid, * FROM ${entityName} WHERE playerId=? AND profit IS NULL`
+        db.all(sql, playerId, (err, entities) => {
+            callback(err, entities)
+        })
 	}
 
 	static saveOrUpdate(db, forexPosition, callback) {

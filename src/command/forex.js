@@ -137,7 +137,7 @@ function processRate(nick, player, rate, message, resolve) {
         if (!matchPosition){
             resolve(`Forex rates : ${JSON.stringify(rate)}`)
         }else{
-            ForexPosition.findByPlayerId(db, player.account, (err, positions)=>{
+            ForexPosition.findOpenByPlayerId(db, player.account, (err, positions)=>{
                 if (err) console.log(err)
                 else {
                     resolve(`${JSON.stringify(positions)}`)
