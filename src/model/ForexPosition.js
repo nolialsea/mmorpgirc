@@ -37,6 +37,18 @@ module.exports = class ForexPosition extends Entity {
 		}
 	}
 
+	static toDto(position){
+		return {
+			rowid: position.rowid,
+			rate: position.rate,
+			investment: position.investment,
+			autoCloseLoss: position.autoCloseLoss,
+			autoCloseProfit: position.autoCloseProfit,
+			lever: position.lever,
+			isLongPosition: position.isLongPosition,
+		}
+	}
+
 	static init(db, callback) {
 		Entity.createTable(db, entityName, model, callback)
 	}

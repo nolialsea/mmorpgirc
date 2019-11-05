@@ -154,7 +154,8 @@ function processRate(nick, player, rate, message, resolve) {
             ForexPosition.findOpenByPlayerId(db, player.account, (err, positions)=>{
                 if (err) console.log(err)
                 else {
-                    resolve(`${JSON.stringify(positions)}`)
+                    const forexPositions = positions.map(pos=>ForexPosition.toDto(pos))
+                    resolve(`${JSON.stringify(forexPositions)}`)
                 }
             })
         }else if(matchClose && !matchPosition){
