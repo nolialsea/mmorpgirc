@@ -89,8 +89,9 @@ function createPosition(resolve, rate, player, nick, investment, isLongPosition,
         profit: null,
     })
 
-    forexPosition.save(db, (err) => {
+    forexPosition.save(db, (err, p) => {
         if (err) console.log("ERR: " + err)
+        console.log(p)
     })
 
     player.gold -= investment
