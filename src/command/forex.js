@@ -41,7 +41,15 @@ function closePositions() {
             let position
             for (position of positions) {
                 if (!position.closedAt) {
-                    closePosition(position, rate)
+                    const profit = getProfit(position, rate)
+                    const ratio = profit / position.investment
+
+                    const autoCloseProfit = ratio > 0 && ratio > position.autoCloseProfit
+                    const autoCloseLoss = ratio < 0 && Math.abs(ratio) > position.autoCloseLoss
+
+                    if (autoCloseProfit || autoCloseLoss){
+                        closePosition(position, rate)
+                    }
                 }
             }
         }
@@ -52,24 +60,20 @@ function closePosition(position, rate) {
     const profit = getProfit(position, rate)
     const ratio = profit / position.investment
 
-    const autoCloseProfit = ratio > 0 && ratio > position.autoCloseProfit
-    const autoCloseLoss = ratio < 0 && Math.abs(ratio) > position.autoCloseLoss
+    position.closedAt = Date.now()
+    position.profit = profit
 
-    if (autoCloseProfit || autoCloseLoss){
-        position.closedAt = Date.now()
-        position.profit = profit
-        Player.getByAccount(db, position.playerId, (err, player) => {
-            if (err) console.log(err)
-            else if (player) {
-                console.log(`Closing position ${position.rowid}`)
-                player.gold += position.investment + profit
-                Player.update(db, player, (err) => {if (err) console.log(err)})
-                ForexPosition.update(db, position, (err) => {if (err) console.log(err)})
-                client.say(conf.channel, `Closing position of ${position.playerId} with a ${profit >= 0 ? "profit" : "loss"} of ${(ratio*100).toFixed(0)}% (${p.gold(`${profit.toFixed(6)} gold`)})`)
-            }
-        })
-    }
+    Player.getByAccount(db, position.playerId, (err, player) => {
+        if (err) console.log(err)
+        else if (player) {
+            player.gold += position.investment + profit
+            Player.update(db, player, (err) => {if (err) console.log(err)})
+            ForexPosition.update(db, position, (err) => {if (err) console.log(err)})
+            client.say(conf.channel, `Closing position of ${position.playerId} with a ${profit >= 0 ? "profit" : "loss"} of ${(ratio*100).toFixed(0)}% (${p.gold(`${profit.toFixed(6)} gold`)})`)
+        }
+    })
 }
+
 
 function createPosition(resolve, rate, player, nick, investment, isLongPosition, lever = 30, autoCloseLoss = 0.5, autoCloseProfit = 0.5) {
     let forexPosition = new ForexPosition({
