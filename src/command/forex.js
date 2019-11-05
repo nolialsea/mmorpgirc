@@ -74,8 +74,7 @@ function closePosition(position, rate) {
     })
 }
 
-
-function createPosition(resolve, rate, player, nick, investment, isLongPosition, lever = 30, autoCloseLoss = 0.5, autoCloseProfit = 0.5) {
+function createPosition(rate, player, nick, investment, isLongPosition, lever = 30, autoCloseLoss = 0.5, autoCloseProfit = 0.5) {
     let forexPosition = new ForexPosition({
         playerId: player.account,
         rate: isLongPosition === 1 ? rate.ask : rate.bid,
@@ -140,9 +139,9 @@ function processRate(nick, player, rate, message, resolve) {
     if (gold && !matchPosition && !matchClose) {
         if (player.gold >= gold){
             if (message.match("(long|buy)")) {
-                createPosition(resolve, rate, player, nick, gold, 1, lever, autoCloseLoss, autoCloseProfit)
+                createPosition(rate, player, nick, gold, 1, lever, autoCloseLoss, autoCloseProfit)
             } else if (message.match("(short|sell)")) {
-                createPosition(resolve, rate, player, nick, gold, 0, lever, autoCloseLoss, autoCloseProfit)
+                createPosition(rate, player, nick, gold, 0, lever, autoCloseLoss, autoCloseProfit)
             }
         } else {
             resolve(`Player ${nick} does not have enough gold (${p.gold(`${player.gold.toFixed(6)}/${gold}`)})`)
