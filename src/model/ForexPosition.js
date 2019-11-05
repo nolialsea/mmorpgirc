@@ -47,7 +47,7 @@ module.exports = class ForexPosition extends Entity {
 
 	static findAllOpen(db, callback){
 		const sql = `SELECT rowid, * FROM ${entityName} WHERE profit IS NULL`
-        db.all(sql, null, (err, entities) => {
+        db.all(sql, (err, entities) => {
             callback(err, entities)
         })
 	}
