@@ -45,6 +45,13 @@ module.exports = class ForexPosition extends Entity {
 		Entity.getByRowid(db, entityName, rowid, callback)
 	}
 
+	static getLastByPlayerId(db, playerId, callback){
+		const sql = `SELECT rowid, * FROM ${entityName} WHERE playerId=? ORDER BY rowid DESC LIMIT 1`
+        db.get(sql, playerId, (err, entities) => {
+            callback(err, entities)
+        })
+	}
+
 	static findAllOpen(db, callback){
 		const sql = `SELECT rowid, * FROM ${entityName} WHERE profit IS NULL`
         db.all(sql, (err, entities) => {

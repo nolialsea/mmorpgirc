@@ -89,15 +89,16 @@ function createPosition(resolve, rate, player, nick, investment, isLongPosition,
         profit: null,
     })
 
-    forexPosition.save(db, (err, p) => {
+    forexPosition.save(db, (err) => {
         if (err) console.log("ERR: " + err)
-        console.log(p)
+        ForexPosition.getLastByPlayerId(db, player.account, (err, pos)=>{
+            client.say(conf.channel, `${p.nick(nick)} takes a ${isLongPosition ? "long" : "short"} position for ${p.gold(`${parseFloat(investment)} gold`)}. Rates: [ask:${rate.ask}, bid: ${rate.bid}]. ID[${pos.rowid}]`)
+        })
     })
 
     player.gold -= investment
     Player.update(db, player, ()=>{})
     
-    resolve(`${p.nick(nick)} takes a ${isLongPosition ? "long" : "short"} position for ${p.gold(`${parseFloat(investment)} gold`)}. Rates: [ask:${rate.ask}, bid: ${rate.bid}]`)
     return forexPosition
 }
 
