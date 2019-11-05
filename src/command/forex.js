@@ -60,7 +60,8 @@ function closePosition(position, rate) {
         position.profit = profit
         Player.getByAccount(db, position.playerId, (err, player) => {
             if (err) console.log(err)
-            else {
+            else if (player) {
+                console.log(`Closing position ${position.rowid}`)
                 player.gold += position.investment + profit
                 Player.update(db, player, (err) => {if (err) console.log(err)})
                 ForexPosition.update(db, position, (err) => {if (err) console.log(err)})
