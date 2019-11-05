@@ -104,11 +104,14 @@ function processRate(nick, player, rate, message, resolve) {
     let autoCloseLossMatch = message.match(/(auto)?(Close)?[Ll]{1}oss[ ]?([0-9]{1}(\.[0-9]{1,6})?)/)
     let autoCloseProfitMatch = message.match(/(auto)?(Close)?[Pp]{1}rofit[ ]?([0-9]{1}(\.[0-9]{1,6})?)/)
     let matchPosition = message.match(/pos(ition)?/)
+    let matchClose = message.match(/close/)
+    let matchId = message.match(/[0-9]{1,12}/)
 
     let gold
     let lever
     let autoCloseLoss
     let autoCloseProfit
+    let id
 
     if (goldMatch) {
         gold = minMax(0.0001, 999999999999, parseFloat(goldMatch[1]))
@@ -122,8 +125,11 @@ function processRate(nick, player, rate, message, resolve) {
     if (autoCloseProfitMatch) {
         autoCloseProfit = minMax(0.01, 0.5, parseFloat(autoCloseProfitMatch[3]))
     }
+    if(matchId){
+        id = parseInt(matchId[0])
+    }
 
-    if (gold && !matchPosition) {
+    if (gold && !matchPosition && !matchClose) {
         if (player.gold >= gold){
             if (message.match("(long|buy)")) {
                 createPosition(resolve, rate, player, nick, gold, 1, lever, autoCloseLoss, autoCloseProfit)
@@ -134,15 +140,32 @@ function processRate(nick, player, rate, message, resolve) {
             resolve(`Player ${nick} does not have enough gold (${p.gold(`${player.gold.toFixed(6)}/${gold}`)})`)
         }
     } else {
-        if (!matchPosition){
+        if (!matchPosition && !matchClose){
             resolve(`Forex rates : ${JSON.stringify(rate)}`)
-        }else{
+        }else if (matchPosition && !matchClose){
             ForexPosition.findOpenByPlayerId(db, player.account, (err, positions)=>{
                 if (err) console.log(err)
                 else {
                     resolve(`${JSON.stringify(positions)}`)
                 }
             })
+        }else if(matchClose && !matchPosition){
+            if (!matchId){
+                resolve(`Can't close a position without id`)
+            }else{
+                ForexPosition.getByRowid(db, id, (err, forexPosition)=>{
+                    if (err) console.log(err)
+                    else if(!forexPosition){
+                        resolve(`Can't find position with id ${id}`)
+                    }else{
+                        if (forexPosition.playerId !== player.account){
+                            resolve(`This Position does not belong to you`)
+                        }else{
+                            resolve(JSON.stringify(forexPosition))
+                        }
+                    }
+                })
+            }
         }
     }
 }
