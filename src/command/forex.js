@@ -100,7 +100,7 @@ function minMax(min, max, value) {
 
 function processRate(nick, player, rate, message, resolve) {
     let goldMatch = message.match(/([0-9]{1,99}(\.[0-9]{1,6})?)g/)
-    let leverMatch = message.match(/l(ever)?[ ]?([0-9]{1,4})/)
+    let leverMatch = message.match(/lever[ ]?([0-9]{1,4})/)
     let autoCloseLossMatch = message.match(/(auto)?(Close)?[Ll]{1}oss[ ]?([0-9]{1}(\.[0-9]{1,6})?)/)
     let autoCloseProfitMatch = message.match(/(auto)?(Close)?[Pp]{1}rofit[ ]?([0-9]{1}(\.[0-9]{1,6})?)/)
     let matchPosition = message.match(/pos(ition)?/)
@@ -114,7 +114,7 @@ function processRate(nick, player, rate, message, resolve) {
         gold = minMax(0.0001, 999999999999, parseFloat(goldMatch[1]))
     }
     if (leverMatch) {
-        lever = minMax(1, 1000, parseInt(leverMatch[2]))
+        lever = minMax(1, 1000, parseInt(leverMatch[1]))
     }
     if (autoCloseLossMatch) {
         autoCloseLoss = minMax(0.01, 0.5, parseFloat(autoCloseLossMatch[3]))
