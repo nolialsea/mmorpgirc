@@ -47,7 +47,7 @@ function closePositions() {
                     const autoCloseProfit = ratio > 0 && ratio > position.autoCloseProfit
                     const autoCloseLoss = ratio < 0 && Math.abs(ratio) > position.autoCloseLoss
 
-                    if (autoCloseProfit || autoCloseLoss){
+                    if (autoCloseProfit || autoCloseLoss) {
                         closePosition(position, rate)
                     }
                 }
@@ -67,8 +67,12 @@ function closePosition(position, rate) {
         if (err) console.log(err)
         else if (player) {
             player.gold += position.investment + profit
-            Player.update(db, player, (err) => {if (err) console.log(err)})
-            ForexPosition.update(db, position, (err) => {if (err) console.log(err)})
+            Player.update(db, player, (err) => {
+                if (err) console.log(err)
+            })
+            ForexPosition.update(db, position, (err) => {
+                if (err) console.log(err)
+            })
             client.say(conf.channel, `Closing position of ${position.playerId} with a ${profit >= 0 ? "profit" : "loss"} of ${(ratio*100).toFixed(0)}% (${p.gold(`${profit.toFixed(6)} gold`)})`)
         }
     })
@@ -90,14 +94,14 @@ function createPosition(rate, player, nick, investment, isLongPosition, lever = 
 
     forexPosition.save(db, (err) => {
         if (err) console.log("ERR: " + err)
-        ForexPosition.getLastByPlayerId(db, player.account, (err, pos)=>{
+        ForexPosition.getLastByPlayerId(db, player.account, (err, pos) => {
             client.say(conf.channel, `${p.nick(nick)} takes a ${isLongPosition ? "long" : "short"} position for ${p.gold(`${parseFloat(investment)} gold`)}. Rates: [ask:${rate.ask}, bid: ${rate.bid}]. ID[${pos.rowid}]`)
         })
     })
 
     player.gold -= investment
-    Player.update(db, player, ()=>{})
-    
+    Player.update(db, player, () => {})
+
     return forexPosition
 }
 
@@ -132,12 +136,12 @@ function processRate(nick, player, rate, message, resolve) {
     if (autoCloseProfitMatch) {
         autoCloseProfit = minMax(0.01, 0.5, parseFloat(autoCloseProfitMatch[3]))
     }
-    if(matchId){
+    if (matchId) {
         id = parseInt(matchId[0])
     }
 
     if (gold && !matchPosition && !matchClose) {
-        if (player.gold >= gold){
+        if (player.gold >= gold) {
             if (message.match("(long|buy)")) {
                 createPosition(rate, player, nick, gold, 1, lever, autoCloseLoss, autoCloseProfit)
             } else if (message.match("(short|sell)")) {
@@ -147,33 +151,36 @@ function processRate(nick, player, rate, message, resolve) {
             resolve(`Player ${nick} does not have enough gold (${p.gold(`${player.gold.toFixed(6)}/${gold}`)})`)
         }
     } else {
-        if (!matchPosition && !matchClose){
+        if (!matchPosition && !matchClose) {
             resolve(`Forex rates : ${JSON.stringify(rate)}`)
-        }else if (matchPosition && !matchClose){
-            ForexPosition.findOpenByPlayerId(db, player.account, (err, positions)=>{
+        } else if (matchPosition && !matchClose) {
+            ForexPosition.findOpenByPlayerId(db, player.account, (err, positions) => {
                 if (err) console.log(err)
                 else {
-                    const forexPositions = positions.map(pos=>ForexPosition.toDto(pos))
-                    resolve(`${JSON.stringify(
-                        forexPositions.map(pos=>{
-                            const profit = getProfit(pos, rate)
-                            const ratio = profit / pos.investment
-                            return ForexPosition.toDto(pos)+" "+p.gold(profit) + " (profit: "+(ratio*100).toFixed(0)+"%)"}
-                            ))}`)
+                    const forexPositions = positions.map(pos => ForexPosition.toDto(pos))
+                    resolve(JSON.stringify(
+                        forexPositions.map(
+                            pos => {
+                                const profit = getProfit(pos, rate)
+                                const ratio = profit / pos.investment
+                                return `${ForexPosition.toDto(pos)} ${p.gold(profit)} (profit: ${(ratio*100).toFixed(0)}%)`
+                            }
+                        )
+                    ))
                 }
             })
-        }else if(matchClose && !matchPosition){
-            if (!matchId){
+        } else if (matchClose && !matchPosition) {
+            if (!matchId) {
                 resolve(`Can't close a position without id`)
-            }else{
-                ForexPosition.getByRowid(db, id, (err, forexPosition)=>{
+            } else {
+                ForexPosition.getByRowid(db, id, (err, forexPosition) => {
                     if (err) console.log(err)
-                    else if(!forexPosition){
+                    else if (!forexPosition) {
                         resolve(`Can't find position with id ${id}`)
-                    }else{
-                        if (forexPosition.playerId !== player.account){
+                    } else {
+                        if (forexPosition.playerId !== player.account) {
                             resolve(`This Position does not belong to you`)
-                        }else{
+                        } else {
                             closePosition(forexPosition, rate)
                         }
                     }
