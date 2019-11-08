@@ -165,7 +165,7 @@ function processRate(nick, player, rate, message, resolve) {
                                 const ratio = profit / pos.investment
                                 return `${JSON.stringify(ForexPosition.toDto(pos))} ${p.gold(profit)} (profit: ${p.success((ratio*100).toFixed(0), ratio > 0)}%)`
                             }
-                        ).join(' ')
+                        )
                     )
                 }
             })
