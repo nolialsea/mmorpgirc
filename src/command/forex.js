@@ -158,15 +158,15 @@ function processRate(nick, player, rate, message, resolve) {
                 if (err) console.log(err)
                 else {
                     const forexPositions = positions.map(pos => ForexPosition.toDto(pos))
-                    resolve(JSON.stringify(
+                    resolve(
                         forexPositions.map(
                             pos => {
                                 const profit = getProfit(pos, rate)
                                 const ratio = profit / pos.investment
-                                return `${ForexPosition.toDto(pos)} ${p.gold(profit)} (profit: ${(ratio*100).toFixed(0)}%)`
+                                return `${JSON.stringify(ForexPosition.toDto(pos))} ${p.gold(profit)} (profit: ${(ratio*100).toFixed(0)}%)`
                             }
-                        )
-                    ))
+                        ).join(' ')
+                    )
                 }
             })
         } else if (matchClose && !matchPosition) {
