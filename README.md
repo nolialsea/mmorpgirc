@@ -2,7 +2,50 @@
 BotCoin is an IDLE-MMO-RPG-IRC game in which you mine worthless virtual gold, designed by/for the #CBNA channel on Freenode.  
 
 This page will change as new features are implemented or defined on paper, so make sure to take a look often  
-The project is still WIP
+The project is still WIP.
+
+## Documentation
+
+### TimeCredits
+Used to make actions, you earn them by simply existing (and being registered to the irc server) for now.  
+You earn one TimeCredit every minute you exist.  
+You can see how many TimeCredits you have with the `!time` command.  
+
+### Mine
+Allows to mine gold, but costs time  
+Example commands:  
+  - `!mine`: mine as much time you can (consume all `TimeCredit`)
+  - `!mine 42m`: mine for 42 minutes
+  - `!mine 1h`: mine for 60 minutes
+  - `!mine 1d`: mine for 1440 minutes
+  - `!mine 1 day, 1 hour and 1 minute`: mine for 1501min (1d + 1h + 1min)
+  - But this also works : `/me goes to the mine for 42 minutes`
+  - Basically you must have the keywords `mine` to mine and you can specify or not for how long. Almost all features work like that
+
+### Forex
+I went a little crazy and implemented a forex connector using realtime data from the EUR/USD forex market  
+You can now use your mined gold to create forex positions like a real trader !  
+Positions are closed automaticaly when meeting required conditions (`profit|loss`)  
+
+There are 4 commands for forex  
+
+The first one `!forex`, will simply tell you the current rates for EUR/USD  
+
+The second one is to create a forex position, the command itself has 4 components :
+  - `buy|long` and `sell|short`: the direction of the position. Buy/long are the same, as for sell/short.
+  - `gold` or `g`: how much gold you want to invest
+  - `profit`: at which profit you want the position to auto close (min `0.01` max `0.5`, `0.5` by default)
+  - `loss`: at which loss you want the position to auto close (min `0.01` max `0.5`, `0.5` by default)
+
+Example commands to create positions:  
+  - `!forex buy 1gold`: create a long position for 1 gold
+  - `!forex long 1g lever 1000 profit 0.2 loss 0.4`: create a long position for 1gold with lever of 1000, auto closing when either +20% profit or -40% loss
+
+You can also check your current positions with `!forex positions` or `!forex pos`  
+
+Finally, you can close positions with `!forex close ID` where `ID` is the `rowid` of the position
+
+# Features
 
 ## Existing features:
   - Temporal Actions : Each action takes a certain amount of time
