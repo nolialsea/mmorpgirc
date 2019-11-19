@@ -14,7 +14,7 @@ const db = new sqlite3.Database('database.sqlite3', initDatabase)
 db.serialize()
 
 function initDatabase() {
-	//FIXME: ugly way to chain
+	//FIXME: ugly way to serialize initialization
 	Player.init(db, () => {
 		Pickaxe.init(db, () => {
 			ForexPosition.init(db, onDatabaseReady)
@@ -33,6 +33,8 @@ function getCommands(db, client) {
 	]
 }
 
+
+//TODO: externalize
 const commandTool = {
 	removeCommandTrigger: (msg) => {
 		if (msg.startsWith(conf.commandTrigger)) {

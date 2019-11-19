@@ -134,7 +134,7 @@ function processRate(nick, player, rate, message, resolve) {
         autoCloseLoss = minMax(0.01, 0.5, parseFloat(autoCloseLossMatch[3]))
     }
     if (autoCloseProfitMatch) {
-        autoCloseProfit = minMax(0.01, 0.5, parseFloat(autoCloseProfitMatch[3]))
+        autoCloseProfit = minMax(0.01, 1000, parseFloat(autoCloseProfitMatch[3]))
     }
     if (matchId) {
         id = parseInt(matchId[0])
@@ -194,7 +194,7 @@ module.exports = (database, client_) => {
     client = client_
     db = database
 
-    setInterval(getRate, 5000)
+    setInterval(getRate, 1000)
 
     return {
         triggerCommand,
